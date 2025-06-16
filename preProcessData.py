@@ -1,26 +1,65 @@
 import pandas as pd
 import os
 import requests
+from io import BytesIO
 
-DROPBOX_URL = "https://www.dropbox.com/scl/fi/9mutc67knfn6jpxbze6a3/chicago_crimes_2015_2025.parquet?rlkey=098nh2hbqk0er2ytuxac6ry9y&st=ptnmzd3y&dl=1"
+DROPBOX_URL = "https://www.dropbox.com/scl/fi/j9fwky905by6i5qb5mi2w/chicago_crimes_2018_2024.parquet?rlkey=0c06zaptg1e6w7p62nthb0eq8&st=bhwzfw1e&dl=1"
 LOCAL_PATH = "./data/chicago_crimes_2015_2025.parquet"
 
-def download_parquet():
-    if not os.path.exists(LOCAL_PATH):
-        os.makedirs("data", exist_ok=True)
-        print("Téléchargement du fichier Parquet...")
-        response = requests.get(DROPBOX_URL)
-        response.raise_for_status()
-        with open(LOCAL_PATH, "wb") as f:
-            f.write(response.content)
-        print("Téléchargement terminé.")
-    else:
-        print("Fichier déjà présent localement.")
+
+
 
 def load_main_dataset():
-    download_parquet()
-    df = pd.read_parquet(LOCAL_PATH)
+    print("Téléchargement du fichier Parquet depuis Dropbox...")
+    response = requests.get(DROPBOX_URL)
+    response.raise_for_status()
+    
+    print("Lecture du fichier en mémoire avec optimisation...")
+    columns_needed = ['date', 'primary_type', 'arrest', 'latitude', 'longitude', 'year']
+    
+    # Lecture initiale sans dtype (car non supporté par read_parquet)
+    df = pd.read_parquet(
+        BytesIO(response.content),
+        columns=columns_needed
+    )
+    
+    # Optimisations manuelles après chargement
+    # 1. Conversion des types pour économiser la mémoire
+    if 'primary_type' in df.columns:
+        df['primary_type'] = df['primary_type'].astype('str')
+    
+    if 'arrest' in df.columns:
+        # Gestion des différents formats possibles de 'arrest'
+        if pd.api.types.is_bool_dtype(df['arrest']):
+            pass  # Déjà optimal
+        else:
+            df['arrest'] = df['arrest'].astype(bool)
+    
+    if 'latitude' in df.columns:
+        df['latitude'] = df['latitude'].astype('float32')
+    
+    if 'longitude' in df.columns:
+        df['longitude'] = df['longitude'].astype('float32')
+    
+    if 'year' in df.columns:
+        df['year'] = df['year'].astype('int16')
+    
+    # 2. Conversion des dates
+    df['date'] = pd.to_datetime(df['date'], errors='coerce')
+    
+    # 3. Nettoyage des données
+    df = df.dropna(subset=['date', 'latitude', 'longitude'])
+    
+    print("Lecture terminée avec optimisations.")
+    
+    # Calcul de la mémoire utilisée
+    mem_bytes = df.memory_usage(deep=True).sum()
+    mem_mb = mem_bytes / (1024 ** 2)
+    print(f"💾 Taille mémoire du DataFrame : {mem_mb:.2f} MB")
+    
     return df
+
+
 
 def prepare_bar_chart_data(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
@@ -69,9 +108,19 @@ def prepare_line_chart_data(df: pd.DataFrame) -> pd.DataFrame:
 
 def preprocess_all():
     df = load_main_dataset()
+    df_sampled = df.groupby('year').apply(lambda x: x.sample(n=min(100000, len(x)), random_state=42)).reset_index(drop=True)
     return {
-        "bar": prepare_bar_chart_data(df),
+        "bar": prepare_bar_chart_data(df_sampled),
         "line": prepare_line_chart_data(df),
         "map": prepare_map_data(df),
-        "sankey": prepare_sankey_data(df)
+        "sankey": prepare_sankey_data(df_sampled)
     }
+
+def show_total_memory_usage(dataframes: dict):
+    total_bytes = sum(
+        df.memory_usage(deep=True).sum()
+        for df in dataframes.values()
+        if isinstance(df, pd.DataFrame)
+    )
+    total_mb = total_bytes / (1024 ** 2)
+    print(f"💾 Mémoire totale utilisée par les DataFrames : {total_mb:.2f} MB")
