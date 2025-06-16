@@ -40,8 +40,8 @@ app.layout = html.Div([
 
     html.Div([
         html.Div([
-            html.H1("A Decade of Crime in Chicago", style={"fontSize": "3.5rem", "color": "white", "textAlign": "center"}),
-            html.P("Chicago Crime Data: 2015–2025", style={"fontSize": "1.3rem", "color": "white", "textAlign": "center"}),
+            html.H1("Seven Years of Crime in Chicago", style={"fontSize": "3.5rem", "color": "white", "textAlign": "center"}),
+            html.P("Chicago Crime Data: 2018–2024", style={"fontSize": "1.3rem", "color": "white", "textAlign": "center"}),
             html.A("Explore the Data Visualization", href="#section-data", style={"padding": "1rem 2.5rem", "backgroundColor": "#0A84FF", "color": "white", "borderRadius": "40px", "textDecoration": "none", "fontWeight": "bold", "marginTop": "2rem", "display": "inline-block", "boxShadow": "0 4px 12px rgba(0,0,0,0.3)"})
         ], style={"zIndex": 2, "position": "relative", "textAlign": "center", "display": "flex", "flexDirection": "column", "justifyContent": "center", "alignItems": "center", "height": "100vh"}),
 
@@ -60,17 +60,47 @@ app.layout = html.Div([
 
     html.Div([
         html.H2("Where are crimes located in Chicago?", style={"color": "white", "textAlign": "center", "fontSize": "2rem"}),
+
         html.Div([
-            html.Label("Select Year", style={"color": "white", "fontWeight": "bold"}),
-            dcc.Dropdown(id="year-dropdown", options=[{"label": str(y), "value": y} for y in year_options], value=default_year, clearable=False, style={"width": "30%", "display": "inline-block", "marginRight": "20px"}),
-            html.Label("Select Crime Types", style={"color": "white", "fontWeight": "bold"}),
-            dcc.Dropdown(id="crime-dropdown", options=[{"label": c, "value": c} for c in crime_options], value=default_crimes, multi=True, style={"width": "60%", "display": "inline-block"})
-        ], style={"padding": "0 10% 30px"}),
-        dcc.Graph(id="map-figure", figure=map_fig, config={"displayModeBar": False}, style={"height": "80vh", "marginTop": "10px"})
+            html.Div([
+                html.Label("Select Year", style={"color": "white", "fontWeight": "bold", "marginBottom": "5px"}),
+                dcc.Dropdown(
+                    id="year-dropdown",
+                    options=[{"label": str(y), "value": y} for y in year_options],
+                    value=default_year,
+                    clearable=False,
+                    style={"width": "100%"}
+                )
+            ], style={"flex": "1", "marginRight": "20px"}),
+
+            html.Div([
+                html.Label("Select Crime Types", style={"color": "white", "fontWeight": "bold", "marginBottom": "5px"}),
+                dcc.Dropdown(
+                    id="crime-dropdown",
+                    options=[{"label": c, "value": c} for c in crime_options],
+                    value=default_crimes,
+                    multi=True,
+                    style={"width": "100%"}
+                )
+            ], style={"flex": "2"})
+        ], style={
+            "display": "flex",
+            "gap": "20px",
+            "padding": "0 10% 30px",
+            "flexWrap": "wrap"
+        }),
+
+        dcc.Graph(
+            id="map-figure",
+            figure=map_fig,
+            config={"displayModeBar": False},
+            style={"height": "80vh", "marginTop": "10px", "maxWidth": "90%", "marginLeft": "auto", "marginRight": "auto"}
+        )
     ], id="section-map", style={"backgroundColor": "#111111", "padding": "80px 0"}),
 
     html.Div([
         html.H2("When Does Crime Peak?", style={"color": "white", "textAlign": "center", "fontSize": "2rem"}),
+
         html.Div([
             html.Label("Select Time Unit", style={"color": "white", "fontWeight": "bold", "marginRight": "10px"}),
             dcc.Dropdown(
@@ -107,5 +137,4 @@ def update_map(selected_year, selected_crimes):
 )
 def update_chart(time_unit):
     return create_interactive_hour_chart(lineChart_df, time_unit)
-
 
