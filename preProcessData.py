@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import requests
 from io import BytesIO
+import numpy as np
 
 DROPBOX_URL = "https://www.dropbox.com/scl/fi/abc123/mon_fichier.parquet?rlkey=xyz&dl=1"
 LOCAL_FILE = "chicago.parquet"
