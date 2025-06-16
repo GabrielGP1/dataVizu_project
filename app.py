@@ -50,12 +50,12 @@ app.layout = html.Div([
 
     html.Div([
         html.H2("Which crimes are most associated with arrests?", style={"color": "white", "textAlign": "center", "fontSize": "2rem"}),
-        dcc.Graph(figure=sankey_fig, style={"height": "75vh", "marginTop": "30px"})
+        dcc.Graph(figure=sankey_fig, config={"displayModeBar": False}, style={"height": "75vh", "marginTop": "30px"})
     ], id="section-data", style={"backgroundColor": "#111111", "padding": "80px 0"}),
 
     html.Div([
         html.H2("Are weekends more dangerous?", style={"color": "white", "textAlign": "center", "fontSize": "2rem"}),
-        dcc.Graph(id='bar-weekend-chart', figure=bar_fig, style={"height": "75vh", "marginTop": "30px"})
+        dcc.Graph(id='bar-weekend-chart', config={"displayModeBar": False}, figure=bar_fig, style={"height": "75vh", "marginTop": "30px"})
     ], id="section-weekend", style={"backgroundColor": "#111111", "padding": "80px 0"}),
 
     html.Div([
@@ -119,6 +119,7 @@ app.layout = html.Div([
         dcc.Graph(
             id="lichart_fig",
             figure=create_interactive_hour_chart(lineChart_df, "hour"),
+            config={"displayModeBar": False},
             style={"height": "75vh", "marginTop": "30px"}
         )
     ], id="section-hourly", style={"backgroundColor": "#111111", "padding": "80px 0"})
