@@ -1,46 +1,54 @@
+import os
 import pandas as pd
-import numpy as np
 import requests
 from io import BytesIO
 
-DROPBOX_URL = "https://www.dropbox.com/scl/fi/j9fwky905by6i5qb5mi2w/chicago_crimes_2018_2024.parquet?rlkey=0c06zaptg1e6w7p62nthb0eq8&st=bhwzfw1e&dl=1"
+DROPBOX_URL = "https://www.dropbox.com/scl/fi/abc123/mon_fichier.parquet?rlkey=xyz&dl=1"
+LOCAL_FILE = "chicago.parquet"
 
 def load_main_dataset():
-    print("Téléchargement du fichier Parquet depuis Dropbox...")
-    response = requests.get(DROPBOX_URL)
-    response.raise_for_status()
-    
-    print("Lecture du fichier en mémoire avec optimisation...")
+    print(" Vérification du fichier local...")
+    if os.path.exists(LOCAL_FILE):
+        print(f" Chargement local : {LOCAL_FILE}")
+        buffer = LOCAL_FILE
+    else:
+        print(" Téléchargement du fichier Parquet depuis Dropbox...")
+        try:
+            response = requests.get(DROPBOX_URL, timeout=15)
+            response.raise_for_status()
+            with open(LOCAL_FILE, "wb") as f:
+                f.write(response.content)
+            print(f" Fichier téléchargé et sauvegardé localement sous : {LOCAL_FILE}")
+            buffer = LOCAL_FILE
+        except requests.exceptions.RequestException as e:
+            print("❌ Erreur de téléchargement :", e)
+            exit(1)
+
+    print("📊 Lecture du fichier en mémoire avec optimisation...")
+
     columns_needed = ['date', 'primary_type', 'arrest', 'latitude', 'longitude', 'year']
-    
-    # Définition des types optimisés pour chaque colonne
     dtype_mapping = {
-        'primary_type': 'category',  # Bon pour les variables avec peu de valeurs uniques
+        'primary_type': 'category',
         'arrest': 'bool',
         'latitude': 'float32',
         'longitude': 'float32',
         'year': 'int16'
     }
-    
-    # Lecture avec filtrage précoce et conversion de types
-    df = pd.read_parquet(
-        BytesIO(response.content),
-        columns=columns_needed
-    )
-    
-    # Conversion des types selon le mapping
+
+    df = pd.read_parquet(buffer, columns=columns_needed)
+
     for col, dtype in dtype_mapping.items():
         if col in df.columns:
             df[col] = df[col].astype(dtype)
-    
-    # Conversion des dates et nettoyage
+
     df['date'] = pd.to_datetime(df['date'], errors='coerce')
     df = df.dropna(subset=['date', 'latitude', 'longitude'])
-    
-    print("Lecture terminée avec optimisations.")
+
+    print(" Lecture terminée avec optimisations.")
     print_memory_usage(df)
-    
+
     return df
+
 
 def prepare_bar_chart_data(df: pd.DataFrame) -> pd.DataFrame:
     # Création d'une copie pour éviter les modifications sur le DataFrame original
