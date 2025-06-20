@@ -27,7 +27,7 @@ def create_map(df: pd.DataFrame, selected_year: int = None, selected_crimes: lis
             ),
             height=900,
             margin={"r": 0, "t": 0, "l": 0, "b": 0},
-            legend_title="Crime Type",
+            legend_title="Crime Types",
             title=title
         )
         return fig
@@ -44,7 +44,7 @@ def create_map(df: pd.DataFrame, selected_year: int = None, selected_crimes: lis
         ).update_layout(
             margin={"r": 0, "t": 0, "l": 0, "b": 0},
             height=900,
-            legend_title="Crime Type"
+            legend_title="Crime Types"
         )
 
     
@@ -61,7 +61,7 @@ def create_map(df: pd.DataFrame, selected_year: int = None, selected_crimes: lis
         ).update_layout(
             margin={"r": 0, "t": 0, "l": 0, "b": 0},
             height=900,
-            legend_title="Crime Type"
+            legend_title="Crime Types"
         )
 
     # Generate clustered markers per crime
@@ -73,7 +73,7 @@ def create_map(df: pd.DataFrame, selected_year: int = None, selected_crimes: lis
             continue
 
         coords = crime_df[['latitude', 'longitude']]
-        clustering = DBSCAN(eps=0.007, min_samples=2).fit(coords)
+        clustering = DBSCAN(eps=0.022, min_samples=1).fit(coords)
         crime_df['cluster'] = clustering.labels_
         crime_df = crime_df[crime_df['cluster'] != -1]
 
@@ -91,13 +91,18 @@ def create_map(df: pd.DataFrame, selected_year: int = None, selected_crimes: lis
         grouped['label'] = grouped.apply(
             lambda row: f"<b>{crime}</b> ({row['percentage']:.1f}%)", axis=1
         )
+        grouped['latitude'] += np.random.uniform(-0.0005, 0.0005, size=len(grouped))
+        grouped['longitude'] += np.random.uniform(-0.0005, 0.0005, size=len(grouped))
 
+        
+        
         traces.append(go.Scattermapbox(
             lat=grouped['latitude'],
             lon=grouped['longitude'],
             mode='markers',
             marker=go.scattermapbox.Marker(
-                size=grouped['count'] * 40.0,  # Big and clear
+                size = np.sqrt(grouped['count']) * 120,
+                #size = grouped['count'] * 30,
                 sizemode='area',
                 opacity=0.7
             ),
@@ -105,7 +110,7 @@ def create_map(df: pd.DataFrame, selected_year: int = None, selected_crimes: lis
             name=crime,
             hovertemplate="%{text}<extra></extra>",
             hoverlabel=dict(
-                font_size=20,  
+                font_size=18,  
                 font_family="Arial",
 
             )
@@ -121,7 +126,7 @@ def create_map(df: pd.DataFrame, selected_year: int = None, selected_crimes: lis
         ),
         height=900,
         margin={"r": 0, "t": 0, "l": 0, "b": 0},
-        legend_title="Crime Type"
+        legend_title="Crime Types"
     )
 
     return fig

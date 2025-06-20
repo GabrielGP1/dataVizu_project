@@ -61,17 +61,36 @@ app.layout = html.Div([
     html.Div([
         html.H2("Where are crimes located in Chicago?", style={"color": "white", "textAlign": "center", "fontSize": "2rem"}),
 
-       html.P(
-        "Each circle on the map represents a group of nearby crimes clustered within roughly 750 meters. "
-        "The size of the circle reflects the number of crimes in that area, and the color shows the selected crime type.",
+        html.P(
+            "Use the dropdown menus to explore how different crimes are distributed across the city. "
+            "Larger circles indicate higher concentrations of crime, and you can hover over them for more details.",
+            style={
+                "color": "#cccccc",
+                "fontSize": "1.25rem",
+                "textAlign": "center",
+                "maxWidth": "780px",
+                "margin": "10px auto 20px",
+                "fontStyle": "italic",
+                "lineHeight": "1.6"
+            }
+        ),
+
+        html.P(
+        "Each circle on the map represents a group of nearby crimes clustered within roughly 2200 meters. "
+        "The size of the circle reflects the number of crimes in that area, and the color shows the selected crime type."
+        "The map highlights that most common crimes, such as theft, burglary, and criminal damage, tend to cluster around densely populated areas.",
         style={
-            "color": "white",
-            "fontSize": "1.4rem", 
+            "color": "#ffffff",
+            "fontSize": "1.4rem",
             "textAlign": "center",
             "maxWidth": "800px",
-            "margin": "0 auto 30px"
-             }
+            "margin": "0 auto 20px",
+            "fontWeight": "500",
+            "lineHeight": "1.6"
+            }
         ),
+
+
 
         html.Div([
             html.Div([
