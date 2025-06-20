@@ -61,6 +61,18 @@ app.layout = html.Div([
     html.Div([
         html.H2("Where are crimes located in Chicago?", style={"color": "white", "textAlign": "center", "fontSize": "2rem"}),
 
+       html.P(
+        "Each circle on the map represents a group of nearby crimes clustered within roughly 750 meters. "
+        "The size of the circle reflects the number of crimes in that area, and the color shows the selected crime type.",
+        style={
+            "color": "white",
+            "fontSize": "1.4rem", 
+            "textAlign": "center",
+            "maxWidth": "800px",
+            "margin": "0 auto 30px"
+             }
+        ),
+
         html.Div([
             html.Div([
                 html.Label("Select Year", style={"color": "white", "fontWeight": "bold", "marginBottom": "5px"}),
