@@ -1,10 +1,12 @@
-
 import pandas as pd
 import matplotlib.colors as mcolors
 import plotly.express as px
+import legend
 
 
 def create_bar_chart(df):
+    
+    df = legend.preprocess_labels(df, ['Crime_Type', 'Period'])
     
     fig = px.bar(
         df,
@@ -12,7 +14,8 @@ def create_bar_chart(df):
         y="Count",                # Nombre de crimes
         color="Crime_Type",       # Empilement par type de crime
         barmode="stack",          # Stacked bars
-        color_discrete_sequence=px.colors.qualitative.Bold  # Palette stylée type Bloomberg
+        color_discrete_map=legend.CUSTOM_COLORS,  # Palette stylée type Bloomberg
+        labels={'Crime_Type': 'Crime Type', 'Count': 'Number of Crimes'}
     )
 
     # Mise en page personnalisée
@@ -30,6 +33,11 @@ def create_bar_chart(df):
         yaxis=dict(title='Number of Crimes'),
         legend_title="Crime Type",
         height=600,
+    )
+    
+    fig.update_traces(
+        hovertemplate='<b>%{x}</b><br>Type: %{fullData.name}<br>Count: %{y:,}<extra></extra>',
+        hoverlabel=legend.COMMON_HOVER_CONFIG['hoverlabel']
     )
 
     # Affichage du graphique
