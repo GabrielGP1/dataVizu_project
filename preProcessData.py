@@ -4,7 +4,7 @@ import requests
 from io import BytesIO
 import numpy as np
 
-DROPBOX_URL = "https://www.dropbox.com/scl/fi/abc123/mon_fichier.parquet?rlkey=xyz&dl=1"
+DROPBOX_URL = "https://www.dropbox.com/scl/fi/j9fwky905by6i5qb5mi2w/chicago_crimes_2018_2024.parquet?rlkey=0c06zaptg1e6w7p62nthb0eq8&st=py05o5tx&dl=1"
 LOCAL_FILE = "chicago.parquet"
 
 def load_main_dataset():
