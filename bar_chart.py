@@ -1,25 +1,23 @@
 import pandas as pd
-import matplotlib.colors as mcolors
 import plotly.express as px
 import legend
 
-
 def create_bar_chart(df):
-    
+    # Nettoyage des labels
     df = legend.preprocess_labels(df, ['Crime_Type', 'Period'])
-    df["Count_Label"] = df["Count"].apply(legend.format_number)
-    
+
+    # Création du graphique à barres empilées
     fig = px.bar(
         df,
-        x="Period",               # Weekday / Weekend
-        y="Count_Label",                # Nombre de crimes
-        color="Crime_Type",       # Empilement par type de crime
-        barmode="stack",          # Stacked bars
-        color_discrete_map=legend.CUSTOM_COLORS,  # Palette stylée type Bloomberg
+        x="Period",
+        y="Count",  # Utilise la vraie valeur
+        color="Crime_Type",
+        barmode="stack",
+        color_discrete_map=legend.CUSTOM_COLORS,
         labels={'Crime_Type': 'Crime Type', 'Count': 'Number of Crimes'}
     )
 
-    # Mise en page personnalisée
+    # Mise en page
     fig.update_layout(
         title={
             'text': "Crime Distribution: Weekday vs Weekend",
@@ -31,15 +29,33 @@ def create_bar_chart(df):
         paper_bgcolor='#111111',
         font=dict(color='white'),
         xaxis=dict(title='Period'),
-        yaxis=dict(title='Number of Crimes (k)'),
+        yaxis=dict(
+            title='Number of Crimes',
+            tickformat='~s'  # Affiche automatiquement k, M, B
+        ),
         legend_title="Crime Type",
         height=600,
     )
-    
-    fig.update_traces(
-        hovertemplate='<b>%{x}</b><br>Crime Type: %{fullData.name}<br>Count: %{y:,}k<extra></extra>',
-        hoverlabel=legend.COMMON_HOVER_CONFIG['hoverlabel']
-    )
 
-    # Affichage du graphique
+    # ✅ Ajout d’un hover formaté en "k"
+    def format_hover_k(y):
+        if y >= 1_000_000:
+            return f"{y / 1_000_000:.1f}M"
+        elif y >= 1_000:
+            return f"{y / 1_000:.1f}k"
+        else:
+            return str(y)
+
+    # Appliquer le format à chaque trace
+    for trace in fig.data:
+        counts = df[df['Crime_Type'] == trace.name]['Count'].values
+        formatted = [format_hover_k(y) for y in counts]
+        trace.hovertemplate = (
+            '<b>%{x}</b><br>'
+            f'Crime Type: {trace.name}<br>'
+            'Count: %{customdata}<extra></extra>'
+        )
+        trace.customdata = formatted
+        trace.hoverlabel = legend.COMMON_HOVER_CONFIG['hoverlabel']
+
     return fig
