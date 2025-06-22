@@ -8,18 +8,11 @@ import legend
 
 
 def create_map(df: pd.DataFrame, selected_year: int = None, selected_crimes: list = None):
-    # Normalize crime labels
     df['primary_type'] = df['primary_type'].astype(str).apply(legend.format_proper_name)
-    
-
-    # Default year
     if selected_year is None:
         selected_year = df['year'].max()
-
-    # Filter by year
     year_df = df[df['year'] == selected_year].copy()
 
-    # No selection
     if not selected_crimes:
         return px.scatter_mapbox(
             pd.DataFrame(columns=["latitude", "longitude", "primary_type"]),
@@ -37,8 +30,6 @@ def create_map(df: pd.DataFrame, selected_year: int = None, selected_crimes: lis
             font=dict(color='white', family='Arial')
         )
 
-    
-    # Filter by selected crimes
     selected_crimes = [legend.format_proper_name(crime) for crime in selected_crimes]
     filtered = year_df[year_df['primary_type'].isin(selected_crimes)].copy()
     
@@ -63,8 +54,6 @@ def create_map(df: pd.DataFrame, selected_year: int = None, selected_crimes: lis
     crime_counts.columns = ['crime_type', 'count']
     top_5_crimes = crime_counts.nlargest(5, 'count')['crime_type'].tolist()
 
-
-    # Generate clustered markers per crime
     traces = []
     for crime in selected_crimes:
         crime_df = filtered[filtered['primary_type'] == crime].copy()
@@ -102,7 +91,6 @@ def create_map(df: pd.DataFrame, selected_year: int = None, selected_crimes: lis
             mode='markers',
             marker=go.scattermapbox.Marker(
                 size = np.sqrt(grouped['count']) * 120,
-                #size = grouped['count'] * 30,
                 sizemode='area',
                 opacity=0.7,
                 color=marker_color
@@ -117,7 +105,6 @@ def create_map(df: pd.DataFrame, selected_year: int = None, selected_crimes: lis
             visible=visible
         ))
 
-    # Final map with all traces
     fig = go.Figure(data=traces)
     fig.update_layout(
         mapbox=dict(

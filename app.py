@@ -1,3 +1,18 @@
+"""
+app.py
+
+Main dashboard application for exploring Chicago crime data from 2018 to 2024.
+Built with Dash and Plotly, this dashboard includes:
+- A geospatial crime map
+- A Sankey diagram of crime resolution outcomes
+- An interactive time-based line chart
+- A stacked bar chart comparing weekday vs weekend crimes
+
+Author: Team 13
+Course: INF8808 – Data Visualization
+Date: June 2025
+"""
+
 import dash
 import dash_html_components as html
 import dash_core_components as dcc
@@ -107,19 +122,18 @@ app.layout = html.Div([
     html.Div([
         html.H2("When Does Crime Peak?", style={"color": "white", "textAlign": "center", "fontSize": "2rem"}),
         html.Div([
-            html.Label("Select Time Unit", style={"color": "white", "fontWeight": "bold", "marginRight": "10px"}),
-            dcc.Dropdown(
-                id="time-unit-dropdown",
-                options=[
-                    {"label": "Hour", "value": "hour"},
-                    {"label": "Month", "value": "month"},
-                    {"label": "Year", "value": "year"},
-                ],
-                value="hour",
-                clearable=False,
-                style={"width": "200px", "display": "inline-block", "marginRight": "40px"}
-            )
-        ], style={"textAlign": "center", "marginBottom": "20px"}),
+        html.P(
+            "Click and drag to zoom in. Double-click to zoom out",
+            style={
+                "color": "#cccccc",
+                "fontSize": "1.25rem",
+                "textAlign": "center",
+                "maxWidth": "780px",
+                "margin": "10px auto 20px",
+                "fontStyle": "italic",
+                "lineHeight": "1.6"
+            }
+        ),
         html.P(
         "This area chart shows the distribution of reported crimes across each hour of the day, each month of the year and every year. "
         "This visualization helps identify the moment when law enforcement presence may be most critical.",
@@ -133,6 +147,19 @@ app.layout = html.Div([
             "lineHeight": "1.6"
             }
         ),
+        html.Label("Select Time Unit", style={"color": "white", "fontWeight": "bold", "marginRight": "10px"}),
+            dcc.Dropdown(
+                id="time-unit-dropdown",
+                options=[
+                    {"label": "Hour", "value": "hour"},
+                    {"label": "Month", "value": "month"},
+                    {"label": "Year", "value": "year"},
+                ],
+                value="hour",
+                clearable=False,
+                style={"width": "200px", "display": "inline-block", "marginRight": "40px"}
+            )
+        ], style={"textAlign": "center", "marginBottom": "20px"}),
         dcc.Graph(
             id="lichart_fig",
             figure=create_interactive_hour_chart(lineChart_df, "hour"),
@@ -143,6 +170,18 @@ app.layout = html.Div([
 
     html.Div([
         html.H2("Are weekends more dangerous?", style={"color": "white", "textAlign": "center", "fontSize": "2rem"}),
+        html.P(
+            "Click and drag to zoom in. Double-click to zoom out",
+            style={
+                "color": "#cccccc",
+                "fontSize": "1.25rem",
+                "textAlign": "center",
+                "maxWidth": "780px",
+                "margin": "10px auto 20px",
+                "fontStyle": "italic",
+                "lineHeight": "1.6"
+            }
+        ),
         html.P(
         "This stacked bar chart compares the total number of crimes occurring on weekdays versus weekends. "
         "While crime volume is clearly higher on weekdays, the distribution of crime types remains relatively consistent. "
@@ -185,6 +224,15 @@ app.layout = html.Div([
     [Input("year-dropdown", "value")]
 )
 def update_map(selected_year):
+    """
+    Updates the crime map based on the selected year.
+
+    Args:
+        selected_year (int): Selected year from the dropdown.
+
+    Returns:
+        plotly.graph_objects.Figure: Updated map.
+    """
     return create_map(map_df, selected_year, default_crimes)
 
 @app.callback(
@@ -192,5 +240,14 @@ def update_map(selected_year):
     [Input("time-unit-dropdown", "value")]  
 )
 def update_chart(time_unit):
+    """
+    Updates the time-based line chart (hour/month/year) based on user selection.
+
+    Args:
+        time_unit (str): One of ["hour", "month", "year"].
+
+    Returns:
+        plotly.graph_objects.Figure: Updated line chart.
+    """
     return create_interactive_hour_chart(lineChart_df, time_unit)
 

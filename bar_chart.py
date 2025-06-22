@@ -1,3 +1,13 @@
+"""
+bar_chart.py
+
+File to build bar chart
+
+Author: Team 13
+Course: INF8808 – Data Visualization
+Date: June 2025
+"""
+
 import pandas as pd
 import plotly.express as px
 import legend
