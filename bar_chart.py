@@ -3,21 +3,20 @@ import plotly.express as px
 import legend
 
 def create_bar_chart(df):
-    # Nettoyage des labels
+   
     df = legend.preprocess_labels(df, ['Crime_Type', 'Period'])
 
-    # Création du graphique à barres empilées
     fig = px.bar(
         df,
         x="Period",
-        y="Count",  # Utilise la vraie valeur
+        y="Count", 
         color="Crime_Type",
         barmode="stack",
         color_discrete_map=legend.CUSTOM_COLORS,
         labels={'Crime_Type': 'Crime Type', 'Count': 'Number of Crimes'}
     )
 
-    # Mise en page
+
     fig.update_layout(
         title={
             'text': "Crime Distribution: Weekday vs Weekend",
@@ -31,13 +30,13 @@ def create_bar_chart(df):
         xaxis=dict(title='Period'),
         yaxis=dict(
             title='Number of Crimes',
-            tickformat='~s'  # Affiche automatiquement k, M, B
+            tickformat='~s' 
         ),
         legend_title="Crime Type",
         height=600,
     )
 
-    # ✅ Ajout d’un hover formaté en "k"
+
     def format_hover_k(y):
         if y >= 1_000_000:
             return f"{y / 1_000_000:.1f}M"
@@ -46,7 +45,7 @@ def create_bar_chart(df):
         else:
             return str(y)
 
-    # Appliquer le format à chaque trace
+
     for trace in fig.data:
         counts = df[df['Crime_Type'] == trace.name]['Count'].values
         formatted = [format_hover_k(y) for y in counts]
