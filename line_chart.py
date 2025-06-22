@@ -61,16 +61,33 @@ def create_interactive_hour_chart(df, time_unit: str = "hour"):
         fig.update_xaxes(
             tickmode='array',
             tickvals=list(range(1, 24)),
-            title='Hour'
+            title='Hour',
+            range=[0.1, None]
         )
     
     elif time_unit == 'month':
+        fig.update_yaxes(
+            tickmode='array',
+            range=[grouped['count'].min() - 0.2, None]
+        )
         fig.update_xaxes(
             tickmode='array',
             tickvals=list(range(1, 13)),
             ticktext=["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                       "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-            title='Month'
+            title='Month',
+            range=[df['month'].min() - 0.2, None]
+        )
+    
+    elif time_unit == 'year':
+        fig.update_yaxes(
+            tickmode='array',
+            range=[grouped['count'].min() - 0.2, None]
+        )
+        fig.update_xaxes(
+            tickmode='linear',
+            title='Year',
+            range=[df['year'].min() - 0.1, None]
         )
     
     return fig
