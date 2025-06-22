@@ -42,8 +42,6 @@ def prepare_nodes(df):
     crime_right = crime_types[mid:]
     all_nodes = crime_left + resolutions + crime_right
     node_dict = {node: i for i, node in enumerate(all_nodes)}
-    print(node_dict)
-    print(all_nodes)
     return all_nodes, node_dict, crime_left, crime_right, resolutions
 
 
