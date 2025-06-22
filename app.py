@@ -16,7 +16,6 @@ app.title = 'Project | INF8808'
 
 # Load all processed data
 df_dic = pre_process_data.preprocess_all()
-pre_process_data.show_total_memory_usage(df_dic)
 
 sankey_df = df_dic["sankey"]
 sankey_fig = create_sankey(sankey_df)
