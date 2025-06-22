@@ -58,6 +58,19 @@ def create_interactive_hour_chart(df, time_unit: str = "hour"):
     )
         
     if time_unit == 'hour':
-        fig.update_xaxes(tickformat="%H:%M")
+        fig.update_xaxes(
+            tickmode='array',
+            tickvals=list(range(1, 24)),
+            title='Hour'
+        )
+    
+    elif time_unit == 'month':
+        fig.update_xaxes(
+            tickmode='array',
+            tickvals=list(range(1, 13)),
+            ticktext=["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            title='Month'
+        )
     
     return fig

@@ -22,10 +22,10 @@ def load_main_dataset():
             print(f" Fichier téléchargé et sauvegardé localement sous : {LOCAL_FILE}")
             buffer = LOCAL_FILE
         except requests.exceptions.RequestException as e:
-            print("❌ Erreur de téléchargement :", e)
+            print("Erreur de téléchargement :", e)
             exit(1)
 
-    print("📊 Lecture du fichier en mémoire avec optimisation...")
+    print("Lecture du fichier en mémoire avec optimisation...")
 
     columns_needed = ['date', 'primary_type', 'arrest', 'latitude', 'longitude', 'year']
     dtype_mapping = {
@@ -86,7 +86,7 @@ def prepare_line_chart_data(df: pd.DataFrame) -> pd.DataFrame:
 def print_memory_usage(df: pd.DataFrame):
     mem_bytes = df.memory_usage(deep=True).sum()
     mem_mb = mem_bytes / (1024 ** 2)
-    print(f"💾 Taille mémoire du DataFrame : {mem_mb:.2f} MB")
+    print(f"Taille mémoire du DataFrame : {mem_mb:.2f} MB")
 
 def preprocess_all():
     df = load_main_dataset()
@@ -106,4 +106,4 @@ def show_total_memory_usage(dataframes: dict):
         if isinstance(df, pd.DataFrame)
     )
     total_mb = total_bytes / (1024 ** 2)
-    print(f"💾 Mémoire totale utilisée par les DataFrames : {total_mb:.2f} MB")
+    print(f"Mémoire totale utilisée par les DataFrames : {total_mb:.2f} MB")
