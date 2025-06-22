@@ -70,15 +70,15 @@ def create_sankey_figure(all_nodes, node_colors, x, y, totals, sources, targets,
             hovertemplate='%{label}<br>Total Cases: %{customdata}<extra></extra>'
         ),
         link=dict(
-            source=sources,
-            target=targets,
-            value=values,
-            color=colors,
-            customdata=counts,
-            hovercolor=hover_colors,
-            hoverlabel=dict(font=dict(color="white"), bgcolor="rgba(0,0,0)"),
-            hovertemplate='%{target.label}<br>Crime: %{source.label}<br>Total: %{customdata}<br>Percentage: %{value:.1f}%<extra></extra>'
-        )
+        source=sources,
+        target=targets,
+        value=values,
+        color=colors,
+        customdata=counts,
+        hoverlabel=dict(font=dict(color="white"), bgcolor="rgba(0,0,0)"),
+        hovertemplate='%{target.label}<br>Crime: %{source.label}<br>Total: %{customdata}<br>Percentage: %{value:.1f}%<extra></extra>'
+    )
+
     )])
 
 def create_sankey(df):
