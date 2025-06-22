@@ -49,44 +49,6 @@ app.layout = html.Div([
     ], className="hero-fade", style={"position": "relative", "height": "100vh", "overflow": "hidden"}),
 
     html.Div([
-        html.H2("Which crimes are most associated with arrests?", style={"color": "white", "textAlign": "center", "fontSize": "2rem"}),
-        html.P(
-        "This Sankey diagram visualizes the flow from crime types to their resolution outcomes. "
-        "The thickness of each link represents the percentage of cases from each crime type resulting in an arrest or not. "
-        "Crimes such as Narcotics and Weapons Violations tend to show stronger flows toward arrests, while others are more often unresolved.",
-        style={
-            "color": "#ffffff",
-            "fontSize": "1.4rem",
-            "textAlign": "center",
-            "maxWidth": "800px",
-            "margin": "0 auto 20px",
-            "fontWeight": "500",
-            "lineHeight": "1.6"
-            }
-        ),
-        dcc.Graph(figure=sankey_fig, config={"displayModeBar": False}, style={"height": "75vh", "marginTop": "30px"})
-    ], id="section-data", style={"backgroundColor": "#111111", "padding": "80px 0"}),
-
-    html.Div([
-        html.H2("Are weekends more dangerous?", style={"color": "white", "textAlign": "center", "fontSize": "2rem"}),
-        html.P(
-        "This stacked bar chart compares the total number of crimes occurring on weekdays versus weekends. "
-        "While crime volume is clearly higher on weekdays, the distribution of crime types remains relatively consistent. "
-        "This suggests that although weekends are perceived as more risky, weekdays see significantly more incidents overall.",
-        style={
-            "color": "#ffffff",
-            "fontSize": "1.4rem",
-            "textAlign": "center",
-            "maxWidth": "800px",
-            "margin": "0 auto 20px",
-            "fontWeight": "500",
-            "lineHeight": "1.6"
-            }
-        ),
-        dcc.Graph(id='bar-weekend-chart', config={"displayModeBar": False}, figure=bar_fig, style={"height": "75vh", "marginTop": "30px"})
-    ], id="section-weekend", style={"backgroundColor": "#111111", "padding": "80px 0"}),
-
-    html.Div([
         html.H2("Where are crimes located in Chicago?", style={"color": "white", "textAlign": "center", "fontSize": "2rem"}),
 
         html.P(
@@ -117,8 +79,6 @@ app.layout = html.Div([
             "lineHeight": "1.6"
             }
         ),
-
-
 
         html.Div([
             html.Div([
@@ -192,7 +152,45 @@ app.layout = html.Div([
             config={"displayModeBar": False},
             style={"height": "75vh", "marginTop": "30px"}
         )
-    ], id="section-hourly", style={"backgroundColor": "#111111", "padding": "80px 0"})
+    ], id="section-hourly", style={"backgroundColor": "#111111", "padding": "80px 0"}),
+
+    html.Div([
+        html.H2("Are weekends more dangerous?", style={"color": "white", "textAlign": "center", "fontSize": "2rem"}),
+        html.P(
+        "This stacked bar chart compares the total number of crimes occurring on weekdays versus weekends. "
+        "While crime volume is clearly higher on weekdays, the distribution of crime types remains relatively consistent. "
+        "This suggests that although weekends are perceived as more risky, weekdays see significantly more incidents overall.",
+        style={
+            "color": "#ffffff",
+            "fontSize": "1.4rem",
+            "textAlign": "center",
+            "maxWidth": "800px",
+            "margin": "0 auto 20px",
+            "fontWeight": "500",
+            "lineHeight": "1.6"
+            }
+        ),
+        dcc.Graph(id='bar-weekend-chart', config={"displayModeBar": False}, figure=bar_fig, style={"height": "75vh", "marginTop": "30px"})
+    ], id="section-weekend", style={"backgroundColor": "#111111", "padding": "80px 0"}),
+
+    html.Div([
+        html.H2("Which crimes are most associated with arrests?", style={"color": "white", "textAlign": "center", "fontSize": "2rem"}),
+        html.P(
+        "This Sankey diagram visualizes the flow from crime types to their resolution outcomes. "
+        "The thickness of each link represents the percentage of cases from each crime type resulting in an arrest or not. "
+        "Crimes such as Narcotics and Weapons Violations tend to show stronger flows toward arrests, while others are more often unresolved.",
+        style={
+            "color": "#ffffff",
+            "fontSize": "1.4rem",
+            "textAlign": "center",
+            "maxWidth": "800px",
+            "margin": "0 auto 20px",
+            "fontWeight": "500",
+            "lineHeight": "1.6"
+            }
+        ),
+        dcc.Graph(figure=sankey_fig, config={"displayModeBar": False}, style={"height": "75vh", "marginTop": "30px"})
+    ], id="section-data", style={"backgroundColor": "#111111", "padding": "80px 0"}),
 ])
 
 @app.callback(
