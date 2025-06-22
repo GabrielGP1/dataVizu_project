@@ -73,7 +73,7 @@ def create_map(df: pd.DataFrame, selected_year: int = None, selected_crimes: lis
             continue
 
         coords = crime_df[['latitude', 'longitude']]
-        clustering = DBSCAN(eps=0.022, min_samples=1).fit(coords)
+        clustering = DBSCAN(eps=0.013, min_samples=1).fit(coords)
         crime_df['cluster'] = clustering.labels_
         crime_df = crime_df[crime_df['cluster'] != -1]
 
