@@ -9,7 +9,7 @@ import pre_process_data
 from sankey import create_sankey
 from bar_chart import create_bar_chart
 from map import create_map
-from lineChart import create_interactive_hour_chart
+from line_chart import create_interactive_hour_chart
 
 app = dash.Dash(__name__)
 app.title = 'Project | INF8808'
