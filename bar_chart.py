@@ -3,7 +3,17 @@ import plotly.express as px
 import legend
 
 def create_bar_chart(df):
-   
+    """
+    Crée un graphique à barres empilées montrant la distribution des crimes
+    en semaine vs fin de semaine, groupés par type de crime.
+
+    Args:
+        df (pd.DataFrame): DataFrame contenant les colonnes 'Crime_Type', 'Period', et 'Count'.
+
+    Returns:
+        plotly.graph_objects.Figure: Graphique à barres personnalisé.
+    """
+    
     df = legend.preprocess_labels(df, ['Crime_Type', 'Period'])
 
     fig = px.bar(

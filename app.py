@@ -41,7 +41,7 @@ app.layout = html.Div([
         html.Div([
             html.H1("Seven Years of Crime in Chicago", style={"fontSize": "3.5rem", "color": "white", "textAlign": "center"}),
             html.P("Chicago Crime Data: 2018–2024", style={"fontSize": "1.3rem", "color": "white", "textAlign": "center"}),
-            html.A("Explore the Data Visualization", href="#section-data", style={"padding": "1rem 2.5rem", "backgroundColor": "#0A84FF", "color": "white", "borderRadius": "40px", "textDecoration": "none", "fontWeight": "bold", "marginTop": "2rem", "display": "inline-block", "boxShadow": "0 4px 12px rgba(0,0,0,0.3)"})
+            html.A("Explore the Data Visualization", href="#section-map", style={"padding": "1rem 2.5rem", "backgroundColor": "#0A84FF", "color": "white", "borderRadius": "40px", "textDecoration": "none", "fontWeight": "bold", "marginTop": "2rem", "display": "inline-block", "boxShadow": "0 4px 12px rgba(0,0,0,0.3)"})
         ], style={"zIndex": 2, "position": "relative", "textAlign": "center", "display": "flex", "flexDirection": "column", "justifyContent": "center", "alignItems": "center", "height": "100vh"}),
 
         html.Div(style={"backgroundImage": 'url("/assets/chicago.jpg")', "backgroundSize": "cover", "backgroundPosition": "center", "position": "absolute", "top": 0, "left": 0, "width": "100%", "height": "100vh", "zIndex": 1, "filter": "brightness(0.4)"})
