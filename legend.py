@@ -28,3 +28,8 @@ def preprocess_labels(df, columns):
         if col in df.columns:
             df[col] = df[col].apply(format_proper_name)
     return df
+
+def format_number(num):
+    if num >= 1000:
+        return float(f"{num/1000:,.1f}")
+    return num
