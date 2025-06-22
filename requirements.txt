@@ -35,6 +35,7 @@ pytz
 pyzmq
 requests
 retrying
+scikit-learn
 six
 tornado
 urllib3
