@@ -29,8 +29,7 @@ def create_interactive_hour_chart(df, time_unit: str = "hour"):
         x=time_unit,
         y='count',
         color='crime_grouped',
-        title=f"Crime Distribution by {time_unit.capitalize()}",
-         labels={
+        labels={
             time_unit: time_unit.capitalize(), 
             'count': 'Number of Crimes',
             'crime_grouped': 'Crime Type'
@@ -42,7 +41,13 @@ def create_interactive_hour_chart(df, time_unit: str = "hour"):
         xaxis=dict(tickmode='linear'),
         template='plotly_dark',
         height=600,
-        font=dict(family='Arial')
+        font=dict(family='Arial'),
+         title={
+            'text': f"Crime Distribution by {time_unit.capitalize()}",
+            'x': 0.5,
+            'xanchor': 'center',
+            'font': {'size': 20},
+        },       
     )
     
     if time_unit == 'hour':
