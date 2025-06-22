@@ -66,7 +66,7 @@ app.layout = html.Div([
         ),
 
         html.P(
-        "Each circle on the map represents a group of nearby crimes clustered within roughly 2200 meters. "
+        "Each circle on the map represents a group of nearby crimes clustered within roughly 1500 meters. "
         "The size of the circle reflects the number of crimes in that area, and the color shows the selected crime type."
         "The map highlights that most common crimes, such as theft, burglary, and criminal damage, tend to cluster around densely populated areas.",
         style={
