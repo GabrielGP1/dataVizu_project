@@ -124,7 +124,7 @@ app.layout = html.Div([
         dcc.Graph(
             id="map-figure",
             figure=map_fig,
-            config={"displayModeBar": False},
+            config={"displayModeBar": False, "scrollZoom": True },
             style={"height": "80vh", "marginTop": "10px", "maxWidth": "90%", "marginLeft": "auto", "marginRight": "auto"}
         )
     ], id="section-map", style={"backgroundColor": "#111111", "padding": "80px 0"}),
