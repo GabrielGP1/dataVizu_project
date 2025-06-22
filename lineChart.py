@@ -45,11 +45,18 @@ def create_interactive_hour_chart(df, time_unit: str = "hour"):
         font=dict(family='Arial')
     )
     
+    if time_unit == 'hour':
+        hover = "<b>%{x}:00</b><br>Crime Type: %{fullData.name}<br>Average Count: %{y:.0f}<extra></extra>"
+    elif time_unit == 'month':
+        hover = "<b>Month: %{x}</b><br>Crime Type: %{fullData.name}<br>Average Count: %{y:.0f}<extra></extra>"
+    elif time_unit == 'year':
+        hover = "<b>Year: %{x}</b><br>Crime Type: %{fullData.name}<br>Total Count: %{y:.0f}<extra></extra>"
+
     fig.update_traces(
-        hovertemplate='<b>%{x}</b><br>Type: %{fullData.name}<br>Count: %{y:,}<extra></extra>',
+        hovertemplate=hover,
         hoverlabel=legend.COMMON_HOVER_CONFIG['hoverlabel']
     )
-    
+        
     if time_unit == 'hour':
         fig.update_xaxes(tickformat="%H:%M")
     
