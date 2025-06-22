@@ -29,8 +29,7 @@ map_df = df_dic["map"]
 map_df['primary_type'] = map_df['primary_type'].astype(str).str.title()
 year_options = sorted(map_df['year'].dropna().unique())
 crime_counts = map_df['primary_type'].value_counts()
-default_crimes = crime_counts.nlargest(5).index.tolist()
-crime_options = crime_counts.nlargest(15).index.tolist()
+default_crimes = sorted(crime_counts.nlargest(10).index.tolist())
 default_year = max(year_options)
 map_fig = create_map(map_df, selected_year=default_year, selected_crimes=default_crimes)
 
@@ -89,30 +88,19 @@ app.layout = html.Div([
                     clearable=False,
                     style={"width": "100%"}
                 )
-            ], style={"flex": "1", "marginRight": "20px"}),
-
-            html.Div([
-                html.Label("Select Crime Types", style={"color": "white", "fontWeight": "bold", "marginBottom": "5px"}),
-                dcc.Dropdown(
-                    id="crime-dropdown",
-                    options=[{"label": c, "value": c} for c in crime_options],
-                    value=default_crimes,
-                    multi=True,
-                    style={"width": "100%"}
-                )
-            ], style={"flex": "2"})
+            ], style={"flex": "1"}),
         ], style={
             "display": "flex",
             "gap": "20px",
             "padding": "0 10% 30px",
-            "flexWrap": "wrap"
+            "flexWrap": "wrap",
         }),
 
         dcc.Graph(
             id="map-figure",
             figure=map_fig,
             config={"displayModeBar": False, "scrollZoom": True },
-            style={"height": "80vh", "marginTop": "10px", "maxWidth": "90%", "marginLeft": "auto", "marginRight": "auto"}
+            style={"height": "900px", "marginTop": "10px", "maxWidth": "90%", "marginLeft": "auto", "marginRight": "auto"}
         )
     ], id="section-map", style={"backgroundColor": "#111111", "padding": "80px 0"}),
 
@@ -194,10 +182,10 @@ app.layout = html.Div([
 
 @app.callback(
     Output("map-figure", "figure"),
-    [Input("year-dropdown", "value"), Input("crime-dropdown", "value")]
+    [Input("year-dropdown", "value")]
 )
-def update_map(selected_year, selected_crimes):
-    return create_map(map_df, selected_year, selected_crimes)
+def update_map(selected_year):
+    return create_map(map_df, selected_year, default_crimes)
 
 @app.callback(
     Output("lichart_fig", "figure"),
