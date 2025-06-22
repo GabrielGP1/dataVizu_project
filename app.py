@@ -5,7 +5,7 @@ from dash.dependencies import Input, Output
 import pandas as pd
 import plotly.express as px
 
-import preProcessData
+import pre_process_data
 from sankey import create_sankey
 from bar_chart import create_bar_chart
 from map import create_map
@@ -15,8 +15,8 @@ app = dash.Dash(__name__)
 app.title = 'Project | INF8808'
 
 # Load all processed data
-df_dic = preProcessData.preprocess_all()
-preProcessData.show_total_memory_usage(df_dic)
+df_dic = pre_process_data.preprocess_all()
+pre_process_data.show_total_memory_usage(df_dic)
 
 sankey_df = df_dic["sankey"]
 sankey_fig = create_sankey(sankey_df)
