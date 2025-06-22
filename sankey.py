@@ -156,7 +156,7 @@ def create_sankey_figure(all_nodes, node_colors, x, y, totals, sources, targets,
             x=x,
             y=y,
             hoverlabel=dict(font=dict(color="white")),
-            hovertemplate='%{label}<br>Total Cases: %{customdata}<extra></extra>',
+            hovertemplate='%{label}<br>Total Count: %{customdata}<extra></extra>',
         ),
         link=dict(
             source=sources,
@@ -166,7 +166,7 @@ def create_sankey_figure(all_nodes, node_colors, x, y, totals, sources, targets,
             customdata=counts,
             hovercolor=hover_colors,
             hoverlabel=dict(font=dict(color="white"), bgcolor="rgba(0,0,0)"),
-            hovertemplate='%{target.label}<br>Crime: %{source.label}<br>Total: %{customdata}<br>Percentage: %{value:.1f}%<extra></extra>'
+            hovertemplate='%{target.label}<br>Crime Type: %{source.label}<br>Count: %{customdata}<br>Percentage: %{value:.1f}%<extra></extra>'
         )
     )])
 
